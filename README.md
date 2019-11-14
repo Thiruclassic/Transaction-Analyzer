@@ -22,6 +22,10 @@ $ ./gradlew clean spotlessApply build
 ```
 $ ./gradlew clean test
 ```
+## Running the Application 
+
+Application can be executed by passing input parameters via Command Line args or System Properties. Please find the instruction below:
+
 ### Running the Application with Command Line arguments
 
 Jar file can be found in the folder build/libs folder once the project is built.
