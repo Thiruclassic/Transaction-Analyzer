@@ -21,8 +21,8 @@ public class TransactionAnalyzerTest {
   @Test
   public void testTransactionAnalyzerWithInvalidDataExpectNull() {
     System.setProperty("merchantName", "MacLaren");
-    System.setProperty("fromTime", "20/08/2018");
-    System.setProperty("toTime", "20/08/2018 13:00:00");
+    System.setProperty("fromDate", "20/08/2018");
+    System.setProperty("toDate", "20/08/2018 13:00:00");
 
     TransactionOutput output = TransactionAnalyzer.runAnalyzer(new String[] {});
     assertNull(output);
@@ -31,8 +31,8 @@ public class TransactionAnalyzerTest {
   @Test
   public void testTransactionAnalyzerWithReversalExpectZeroTransactions() {
     System.setProperty("merchantName", "Kwik-E-Mart");
-    System.setProperty("fromTime", "20/08/2018 12:46:00");
-    System.setProperty("toTime", "20/08/2018 12:47:00");
+    System.setProperty("fromDate", "20/08/2018 12:46:00");
+    System.setProperty("toDate", "20/08/2018 12:47:00");
 
     TransactionOutput output = TransactionAnalyzer.runAnalyzer(new String[] {});
     assertEquals(Integer.valueOf(0), output.getTotalTransactions());
@@ -42,8 +42,8 @@ public class TransactionAnalyzerTest {
   @Test
   public void testTransactionAnalyzerWithoutReversalExpectTwoTransactions() {
     System.setProperty("merchantName", "MacLaren");
-    System.setProperty("fromTime", "20/08/2018 12:45:00");
-    System.setProperty("toTime", "20/08/2018 14:08:00");
+    System.setProperty("fromDate", "20/08/2018 12:45:00");
+    System.setProperty("toDate", "20/08/2018 14:08:00");
 
     TransactionOutput output = TransactionAnalyzer.runAnalyzer(new String[] {});
     assertEquals(Integer.valueOf(2), output.getTotalTransactions());
@@ -53,8 +53,8 @@ public class TransactionAnalyzerTest {
   @Test
   public void testTransactionAnalyzer() {
     System.setProperty("merchantName", "Kwik-E-Mart");
-    System.setProperty("fromTime", "20/08/2018 12:00:00");
-    System.setProperty("toTime", "20/08/2018 13:00:00");
+    System.setProperty("fromDate", "20/08/2018 12:00:00");
+    System.setProperty("toDate", "20/08/2018 13:00:00");
 
     TransactionOutput output = TransactionAnalyzer.runAnalyzer(new String[] {});
 

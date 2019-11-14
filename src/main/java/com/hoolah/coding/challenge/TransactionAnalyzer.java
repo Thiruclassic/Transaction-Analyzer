@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -139,14 +140,15 @@ public class TransactionAnalyzer {
    */
   public static TransactionOutput runAnalyzer(String[] args) {
 
+    TransactionAnalyzer analyzer = new TransactionAnalyzer();
+
     try {
       // load input parameters either from command line arguments or System Property
       TransactionInputData inputData = loadInputData(args);
+      analyzer.validateTransactionInput(inputData);
 
       // Load CSV file
       initializeDataFromCSV(inputData.getFileName());
-
-      TransactionAnalyzer analyzer = new TransactionAnalyzer();
 
       // Get  Transaction output from analyzer
       TransactionOutput transactionOutput =
@@ -156,7 +158,7 @@ public class TransactionAnalyzer {
       analyzer.printTransactionDetails(transactionOutput);
       return transactionOutput;
     } catch (Exception e) {
-      System.out.println("Error in running analyzer:" + ExceptionUtils.getMessage(e));
+      System.out.println("Error in running analyzer:" + ExceptionUtils.getStackTrace(e));
       return null;
     }
   }
@@ -175,13 +177,30 @@ public class TransactionAnalyzer {
     } else {
       String csvFileName = System.getProperty("csvFileName");
       String merchantName = System.getProperty("merchantName");
-      String fromTime = System.getProperty("fromTime");
-      String toTime = System.getProperty("toTime");
+      String fromTime = System.getProperty("fromDate");
+      String toTime = System.getProperty("toDate");
       return new TransactionInputData(
           csvFileName,
           merchantName,
           DateTimeUtils.convertStringToLocalDate(fromTime, DATE_TIME_PATTERN),
           DateTimeUtils.convertStringToLocalDate(toTime, DATE_TIME_PATTERN));
+    }
+  }
+
+  /**
+   * Validate transaction input.
+   *
+   * @param inputData the input data
+   */
+  public void validateTransactionInput(TransactionInputData inputData) {
+    if (Objects.isNull(inputData.getMerchantName())) {
+      throw new TransactionException("Merchant Name cannot be empty");
+    }
+    if (Objects.isNull(inputData.getFromDate())) {
+      throw new TransactionException("From Date cannot be empty");
+    }
+    if (Objects.isNull(inputData.getToDate())) {
+      throw new TransactionException("To Date cannot be empty");
     }
   }
 
